@@ -1,0 +1,15 @@
+body {
+    background-color: black;
+}
+
+.background .chatWindow {
+    position: absolute;
+    display: block;
+    background-color: sandybrown;
+    color: black;
+    top: 10vh;
+    left: 20vw;
+    width: 60vw;
+    height: 80vh;
+    text-align: center;
+}
