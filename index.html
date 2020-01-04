@@ -27,8 +27,12 @@
 	<div class="chatBody">
 	</div>
 	<div class="chatFooter">
-		<div class="textField"></div>
-		<div class="sendButton"></div>
+		<div class="inputFieldContainer">
+			<input type="textField" id="inputField" placeholder="Write a message" onkeypress="send_message(event)" />
+		</div>
+		<div class="sendButtonContainer">
+			<img src="assets/images/icon.png" id="sendButton" class="sendButton" />
+		</div>
 	</div>	
 </div>
 
