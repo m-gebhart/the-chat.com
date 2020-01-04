@@ -7,7 +7,7 @@ body {
     display: block;
     background-color: rgb(221, 212, 207);
     color: black;
-    width: 80%;
+    width: calc(100vw - 20%);
     height: 80vh;
     text-align: center;
     top: 7vh;
@@ -54,14 +54,18 @@ body {
 }
 
 .messageBubble {
-    position: absolute;
     background-color: white;
-    border-radius: 3px;
-    height: 30px;
-    margin: auto;
+    border-radius: 4px;
     padding-top: 2px;
-    float: left;
     word-wrap: normal;
+    margin-top: 0.5vh;
+    margin-bottom: 1.5vh;
+    font-size: large;
+}
+
+.timeBubble {
+    margin-left: 100%;
+    margin-right: 100%;
 }
 
 .profileStatus {
