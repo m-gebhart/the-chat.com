@@ -18,20 +18,22 @@
 
 </head>
 <body>
-    <div class="chatWindow">
+    <script src="assets/scripts/chatScript.js"></script>
+
+<div class="chatWindow">
 	<div class="chatHeader">
 		<img src="assets/images/sophie.jpg" id="profilePic" class="profilePic" />
 		<div class="profileName">Sophie Alenir</div>
 		<div class="profileStatus">online</div>
 	</div>		
-	<div class="chatBody">
+	<div class="chatBody" id="chatBody">
 	</div>
 	<div class="chatFooter">
 		<div class="inputFieldContainer">
-			<input type="textField" id="inputField" placeholder="Write a message" onkeypress="send_message(event)" />
+			<input type="textField" id="inputField" placeholder="Write a message" onkeypress="onEnter_sendMessage(event)" />
 		</div>
 		<div class="sendButtonContainer">
-			<img src="assets/images/icon.png" id="sendButton" class="sendButton" />
+			<img src="assets/images/icon.png" id="sendButton" class="sendButton" onclick="send_message()" />
 		</div>
 	</div>	
 </div>
