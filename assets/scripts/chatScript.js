@@ -2,7 +2,7 @@ var chatBody = document.getElementById("chatBody");
 var tempMessage = '';
 var messageTime = 2;
 var tempWidth = 0;
-var pxWidthPerLetter = 8;
+var pxWidthPerLetter = 10;
 var pxOffsetWidth = 6;
 var pxHeightPerLine = 24;
 var maxMessageWidth = 350;
@@ -42,18 +42,15 @@ function create_bubble(textStr, isByPlayer) {
 
 function set_size(bubbleElement, text) {
     bubbleElement.style.width = String(calculate_width(text) + pxOffsetWidth + "px");
-    bubbleElement.style.height = String(calculate_height() + "px");
+    bubbleElement.style.height = String(calculate_height(bubbleElement) + "px");
 }
 
 function calculate_width(textStr) {
-    tempWidth = pxWidthPerLetter * textStr.length;
-    if (tempWidth > maxMessageWidth)
-        return maxMessageWidth;
-    return tempWidth;
+    return pxWidthPerLetter * textStr.length;
 }
 
-function calculate_height() {
-    return Math.ceil(tempWidth / maxMessageWidth) * pxHeightPerLine;
+function calculate_height(element) {
+    return Math.ceil(element.style.maxWidth / element.style.width) * pxHeightPerLine;
 }
 
 function set_direction(bubbleElement, isByPlayer) {
@@ -76,7 +73,7 @@ function set_direction(bubbleElement, isByPlayer) {
 }
 
 function check_recentMessage() {
-    if (tempMessage.includes("Sophie")) {
+    if (tempMessage.includes("ophie")) {
         document.getElementById("profileStatus").innerHTML = "<i>Writing...</i>";
         sleep(messageTime * 1000).then(() => {
             send_npcMessage();

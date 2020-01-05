@@ -57,10 +57,11 @@ body {
     background-color: white;
     border-radius: 4px;
     padding-top: 2px;
-    word-wrap: normal;
+    word-wrap: break-word;
     margin-top: 0.5vh;
     margin-bottom: 1.5vh;
     font-size: large;
+    max-width: 40%;
 }
 
 .timeBubble {
@@ -73,6 +74,7 @@ body {
     font-style: italic;
     grid-area: status;
     text-align: left;
+    padding-top: 10px;
 }
 
 .chatFooter {
