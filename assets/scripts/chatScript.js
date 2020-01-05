@@ -1,13 +1,21 @@
-var chatBody = document.getElementById("chatBody");
+var chatBody;
+var statusLine;
 var tempMessage = '';
 var messageTime = 2;
 var tempWidth = 0;
 var pxWidthPerLetter = 10;
 var pxOffsetWidth = 6;
 var pxHeightPerLine = 24;
-var maxMessageWidth = 350;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
+var firstMessage = true;
+
+window.onload = function start() {
+    chatBody = document.getElementById("chatBody");
+    statusLine = document.getElementById("profileStatus");
+    load_txtHistory();
+    chatBody.scrollTo({ top: "100vh" });
+}
 
 function onEnter_sendMessage(event) {
     if (event.keyCode == 13)
@@ -18,6 +26,9 @@ function send_playerMessage() {
     var inputText = document.getElementById("inputField");
     tempMessage = String(inputText.value);
     inputText.value = '';
+    if (firstMessage)
+        create_timeStamp("today");
+    firstMessage = false;
     create_bubble(tempMessage, true);
     check_recentMessage();
 }
@@ -31,13 +42,23 @@ function load_text() {
     return "Hey, man, long time no see! how are you?";
 }
 
+function create_timeStamp(timeStr) {
+    var timestampBubble = create_divElement(timeStr, "timeBubble");
+    chatBody.appendChild(timestampBubble);
+}
+
 function create_bubble(textStr, isByPlayer) {
-    var tempBubble = document.createElement("div");
-    tempBubble.classList.toggle("messageBubble", true);
-    tempBubble.innerHTML = textStr;
+    var tempBubble = create_divElement(textStr, "messageBubble");
     set_size(tempBubble, tempBubble.innerHTML);
     set_direction(tempBubble, isByPlayer);
-    document.getElementById("chatBody").appendChild(tempBubble);
+    chatBody.appendChild(tempBubble);
+}
+
+function create_divElement(textStr, cssClass) {
+    var divElement = document.createElement("div");
+    divElement.classList.toggle(cssClass, true);
+    divElement.innerHTML = textStr;
+    return divElement;
 }
 
 function set_size(bubbleElement, text) {
@@ -74,10 +95,10 @@ function set_direction(bubbleElement, isByPlayer) {
 
 function check_recentMessage() {
     if (tempMessage.includes("ophie")) {
-        document.getElementById("profileStatus").innerHTML = "<i>Writing...</i>";
+        statusLine.innerHTML = "<i>Writing...</i>";
         sleep(messageTime * 1000).then(() => {
             send_npcMessage();
-            document.getElementById("profileStatus").innerHTML = "Online";
+            statusLine.innerHTML = "Online";
         })
     }
 }
@@ -88,12 +109,35 @@ const sleep = (ms) => {
 
 function load_txtFile(fileName) {
     var txtFile = new XMLHttpRequest();
-    txtFile.open("GET", "assets/txt/" + fileName + ".txt", true);
+    txtFile.open("GET", "assets/txt/" + String(fileName), true);
     txtFile.onreadystatechange = function () {
         if (txtFile.readyState === 4 && txtFile.status == 200) {
             content = txtFile.responseText;
         }
-        return content;
     }
     txtFile.send(null);
+}
+
+function load_txtHistory() {
+    var txtFile = new XMLHttpRequest();
+    txtFile.open("GET", "assets/txt/history.txt", true);
+    txtFile.onreadystatechange = function () {
+        if (txtFile.readyState === 4 && txtFile.status == 200)
+            parse_chatHistory(txtFile.responseText);
+    }
+    txtFile.send(null);
+}
+
+function parse_chatHistory(txtContent) {
+    //chatBody.innerHTML = txtContent;
+    var allMessages = txtContent.split(">>");
+    for (var message = 0; message <= allMessages.length - 1; message++) {
+        if (allMessages[message].includes("["))
+            create_timeStamp(allMessages[message].substring(2, allMessages[message].length - 3));
+        else if (allMessages[message].includes("> "))
+            create_bubble(allMessages[message].substring(2, allMessages[message].length - 1), true);
+        else
+            create_bubble(allMessages[message].substring(0, allMessages[message].length - 1), false);
+
+    }
 }
