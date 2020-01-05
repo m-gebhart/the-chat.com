@@ -131,7 +131,7 @@ function load_txtHistory() {
 function parse_chatHistory(txtContent) {
     //chatBody.innerHTML = txtContent;
     var allMessages = txtContent.split(">>");
-    for (var message = 0; message <= allMessages.length - 1; message++) {
+    for (var message = 1; message <= allMessages.length - 1; message++) {
         if (allMessages[message].includes("["))
             create_timeStamp(allMessages[message].substring(2, allMessages[message].length - 3));
         else if (allMessages[message].includes("> "))

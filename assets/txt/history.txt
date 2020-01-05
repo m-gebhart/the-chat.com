@@ -1,4 +1,4 @@
->> [day 1]
+>> [ day 1 ]
 >>> Hey Soph, you know who it is. This is my new phone.
 >>> The old one was stolen last week. Sorry it took a while to replace it. 
 >>> But you were saying something about your parents…? 
@@ -12,7 +12,7 @@
 >> But...
 >>> NO. I know what happens once you get an idea in that head of yours. But not this time. Okay? 
 >> Okay...
->> [day 3]
+>> [ day 3 ]
 >> Hey...what happened?
 >> Are you there!?
 >> Tell me...tell me when you're back home...
