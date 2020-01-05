@@ -1,0 +1,121 @@
+body {
+    background-color: rgb(106, 144, 131);
+}
+
+.chatWindow {
+    position: relative;
+    display: block;
+    background-color: rgb(221, 212, 207);
+    color: black;
+    width: calc(100vw - 20%);
+    height: 80vh;
+    text-align: center;
+    top: 7vh;
+    margin: auto;
+    overflow: hidden;
+}
+
+.chatHeader {
+    background-color: rgb(224, 224, 224);
+    display: inline-grid;
+    position: relative;
+    grid-template-areas: 'picture name' 'picture status';
+    grid-template-columns: 12vh calc(100% - 12vh);
+    width: 100%;
+    z-index: 2;
+    height: 12vh;
+    overflow: hidden;
+}
+
+.profilePic {
+    position: absolute;
+    width: 10vh;
+    height: 10vh;
+    top: 1vh;
+    left: 1vh;
+    border-radius: 10vh;
+    grid-area: picture;
+}
+
+.profileName {
+    grid-area: name;
+    position: relative;
+    text-align: left;
+    font-size: larger;
+    font-weight: bold;
+    top: 3vh;
+}
+
+.chatBody {
+    top: 0;
+    height: 62vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.messageBubble {
+    background-color: white;
+    border-radius: 4px;
+    padding-top: 2px;
+    word-wrap: break-word;
+    margin-top: 0.5vh;
+    margin-bottom: 1.5vh;
+    font-size: large;
+    max-width: 40%;
+}
+
+.timeBubble {
+    background-color: lightblue;
+    text-align: center;
+    float: left;
+    margin-left: 43%;
+    width: 14%;
+    height: 20px;
+    border-radius: 5px;
+}
+
+.profileStatus {
+    position: relative;
+    font-style: italic;
+    grid-area: status;
+    text-align: left;
+    padding-top: 10px;
+}
+
+.chatFooter {
+    background-color: rgb(224, 224, 224);
+    display: inline-grid;
+    position: relative;
+    grid-template-areas: 'textField sendButton';
+    grid-template-columns: calc(95% - 6vh) 6vh;
+    width: 100%;
+    height: 6vh;
+    top: 0;
+    overflow: hidden;
+}
+
+.inputFieldContainer {
+    grid-area: textField;
+    margin: auto;
+    width: 97%;
+}
+
+.inputFieldContainer input[type=textField] {
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    padding-left: 8px;
+    font-size: large;
+}
+
+.sendButtonContainer {
+    grid-area: sendButton;
+    margin: auto;
+}
+
+.sendButton {
+    width: 4.5vh;
+    height: 4.5vh;
+    float: left;
+    cursor: pointer;
+}
