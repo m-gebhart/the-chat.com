@@ -68,6 +68,20 @@ body {
     max-width: 40%;
 }
 
+.npcBubble {
+    float: left;
+    margin-right: 100%;
+    background-color: white;
+    text-align: left;
+}
+
+.playerBubble {
+    float: right;
+    margin-left: 100%;
+    background-color: rgb(140, 251, 162);
+    text-align: right;
+}
+
 .timeBubble {
     background-color: lightblue;
     text-align: center;
