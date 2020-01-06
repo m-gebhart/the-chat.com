@@ -3,9 +3,9 @@ var statusLine;
 var inputText;
 var onlineAfter = 5;
 var tempInput = '';
-var tempBubble;
 var latestPlayerMessage;
 var messageTime = 1;
+var deleteTransitionTime = 2;
 var tempWidth = 0;
 var pxWidthPerLetter = 10;
 var pxOffsetWidth = 6;
@@ -73,11 +73,12 @@ function create_timeStamp(timeStr) {
 }
 
 function create_bubble(textStr, isByPlayer) {
-    tempBubble = create_divElement(textStr, "messageBubble");
+    var tempBubble = create_divElement(textStr, "messageBubble");
     set_size(tempBubble, tempBubble.innerHTML);
     set_direction(tempBubble, isByPlayer);
     chatBody.appendChild(tempBubble);
     if (isByPlayer && sessionStarted) {
+        //checking for keyword
         latestPlayerMessage = tempBubble;
         load_txtChatSession(sessionProgression);
     }
@@ -122,14 +123,19 @@ const sleep = (ms) => {
 }
 
 function load_txtChatSession(sessionInt) {
-    var txtFile = new XMLHttpRequest();
-    txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
-    txtFile.onreadystatechange = function () {
-        if (txtFile.readyState === 4 && txtFile.status == 200) {
-            parse_chatSession(txtFile.responseText);
+    var sessionNr = 1;
+    if (sessionInt == 2)
+        sessionNr = 2;
+    for (var session = 0; session < sessionNr; session++) {
+        var txtFile = new XMLHttpRequest();
+        txtFile.open("GET", "assets/txt/session_" + String(sessionInt + session) + ".txt", true);
+        txtFile.onreadystatechange = function () {
+            if (txtFile.readyState === 4 && txtFile.status == 200) {
+                parse_chatSession(txtFile.responseText);
+            }
         }
+        txtFile.send(null);
     }
-    txtFile.send(null);
 }
 
 function parse_chatSession(txtContent) {
@@ -137,8 +143,8 @@ function parse_chatSession(txtContent) {
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords))
         send_npcMessages(npcMessages, 1);
-    else 
-        latestPlayerMessage.style.backgroundColor = "red";
+    else
+        delete_playerMessage(latestPlayerMessage);
 }
 
 function check_keyword(message, keywords) {
@@ -146,6 +152,18 @@ function check_keyword(message, keywords) {
         if (message.includes(String(keywords[element])))
             return true;
     return false;
+}
+
+function delete_playerMessage(elementBubble) {
+    elementBubble.style.transitionDuration = String(deleteTransitionTime)+"s";
+    elementBubble.style.transitionDelay = "1s";
+    elementBubble.style.backgroundColor = "red";
+    sleep(deleteTransitionTime * 1000).then(() => {
+        elementBubble.style.opacity = 0;
+        sleep(deleteTransitionTime * 1500).then(() => {
+            elementBubble.remove();
+        })
+    })
 }
 
 function load_txtHistory() {
