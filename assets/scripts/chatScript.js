@@ -15,7 +15,7 @@ var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
 var sessionStarted = false;
 var sessionOver = false;
-var sessionProgression = 1;
+var progressionInt = 1;
 
 window.onload = function start() {
     chatBody = document.getElementById("chatBody");
@@ -28,7 +28,6 @@ window.onload = function start() {
     sleep(1000).then(() => {
         set_scrollBar()
         sessionStarted = true;
-        firstMessage = true;
     })
 }
 
@@ -54,17 +53,16 @@ function send_playerMessage() {
 }
 
 function send_npcMessages(messageArray, messageInt) {
-    sleep(messageTime * 1000).then(() => {
+    sleep(messageTime * 10).then(() => {
         statusLine.innerHTML = "<i>Writing...</i>";
         if (messageInt < messageArray.length) {
-            sleep((messageArray[messageInt].length) * 60).then(() => {
+            sleep((messageArray[messageInt].length) * 1).then(() => {
                 create_bubble(messageArray[messageInt], false);
                 send_npcMessages(messageArray, ++messageInt);
             })
         }
         else {
             statusLine.innerHTML = "Online";
-            sessionProgression++;
             sleep(onlineAfter * 1000).then(() => {
                 statusLine.innerHTML = "";
             })
@@ -85,7 +83,7 @@ function create_bubble(textStr, isByPlayer) {
     if (isByPlayer && sessionStarted) {
         //checking message for keyword
         latestPlayerMessage = tempBubble;
-        load_txtChatSession(sessionProgression);
+        load_txtChatSession(progressionInt);
     }
     set_scrollBar();
 }
@@ -128,53 +126,52 @@ const sleep = (ms) => {
 }
 
 function load_txtChatSession(sessionInt) {
-    //for-loop for possible branching of skippable section 2
-    var sessionNr = 1;
-    if (sessionInt == 2) sessionNr = 2;
-    for (var session = 0; session < sessionNr; session++) {
-        var txtFile = new XMLHttpRequest();
-        txtFile.open("GET", "assets/txt/session_" + String(sessionInt + session) + ".txt", true);
-        txtFile.onreadystatechange = function () {
-            if (txtFile.readyState === 4 && txtFile.status == 200) {
-                parse_chatSession(txtFile.responseText);
-            }
+    var txtFile = new XMLHttpRequest();
+    txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
+    txtFile.onreadystatechange = function () {
+        if (txtFile.readyState === 4 && txtFile.status == 200) {
+            parse_chatSession(txtFile.responseText, sessionInt);
+            firstMessage = false;
         }
-        txtFile.send(null);
     }
+    txtFile.send(null);
 
-    //if npc wrote all the messages
-    if (sessionInt == 5)
+    if (sessionInt == 2 && progressionInt == 2)
+        load_txtChatSession(sessionInt + 1);
+
+    //if all messages are written
+    if (progressionInt == 5)
         sessionOver = true;
 }
 
-function parse_chatSession(txtContent) {
+function parse_chatSession(txtContent, currentSession) {
     var keywords = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[0].split(", ");
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
-    if (check_keyword(tempInput, keywords))
+    if (check_keyword(tempInput, keywords)) {
         send_npcMessages(npcMessages, 1);
-    else if (!firstMessage) 
+        progressionInt = currentSession + 1;
+    }
+    else if (!firstMessage && currentSession != 2)
         delete_playerMessage(latestPlayerMessage);
-    firstMessage = false;
-
 }
 
 function check_keyword(message, keywords) {
     for (var element = 0; element < keywords.length; element++)
-        if (message.toLowerCase().includes(String(keywords[element])))
+        if (message.toLowerCase().includes(keywords[element]))
             return true;
     return false;
 }
 
 function delete_playerMessage(elementBubble) {
-    elementBubble.style.transitionDuration = String(deleteTransitionTime)+"s";
-    elementBubble.style.transitionDelay = "1s";
-    elementBubble.style.backgroundColor = "red";
-    sleep(deleteTransitionTime * 1000).then(() => {
-        elementBubble.style.opacity = 0;
-        sleep(deleteTransitionTime * 1500).then(() => {
-            elementBubble.remove();
+        elementBubble.style.transitionDuration = String(deleteTransitionTime) + "s";
+        elementBubble.style.transitionDelay = "1s";
+        elementBubble.style.backgroundColor = "red";
+        sleep(deleteTransitionTime * 1000).then(() => {
+            elementBubble.style.opacity = 0;
+            sleep(deleteTransitionTime * 1500).then(() => {
+                elementBubble.remove();
+            })
         })
-    })
 }
 
 function load_txtHistory() {
