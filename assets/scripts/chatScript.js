@@ -56,7 +56,7 @@ function send_playerMessage() {
 function send_npcMessages(messageArray, messageInt) {
     statusLine.innerHTML = "<i>Writing...</i>";
     if (messageInt < messageArray.length) {
-        sleep((messageArray[messageInt].length) * 100).then(() => {
+        sleep((messageArray[messageInt].length) * 50).then(() => {
             create_bubble(messageArray[messageInt], false);
             send_npcMessages(messageArray, ++messageInt);
         })
