@@ -9,7 +9,7 @@ var deleteTransitionTime = 2;
 var tempWidth = 0;
 var pxWidthPerLetter = 10;
 var pxOffsetWidth = 6;
-var pxHeightPerLine = 24;
+var pxHeightPerLine = 25;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
@@ -57,7 +57,7 @@ function send_npcMessages(messageArray, messageInt) {
     sleep(messageTime * 1000).then(() => {
         statusLine.innerHTML = "<i>Writing...</i>";
         if (messageInt < messageArray.length) {
-            sleep((messageArray[messageInt].length) * 70).then(() => {
+            sleep((messageArray[messageInt].length) * 60).then(() => {
                 create_bubble(messageArray[messageInt], false);
                 send_npcMessages(messageArray, ++messageInt);
             })

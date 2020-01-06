@@ -87,6 +87,7 @@ body {
     text-align: center;
     float: left;
     margin-left: 38%;
+    min-width: 100px;
     width: 24%;
     height: 20px;
     border-radius: 5px;
@@ -135,7 +136,9 @@ body {
 
 .sendButton {
     width: 4.5vh;
+    min-width: 20px;
     height: 4.5vh;
+    min-height: 20px;
     float: left;
     cursor: pointer;
 }
