@@ -13,6 +13,7 @@ var pxHeightPerLine = 25;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
+var branching = false;
 var sessionStarted = false;
 var sessionOver = false;
 var progressionInt = 1;
@@ -83,7 +84,7 @@ function create_bubble(textStr, isByPlayer) {
     if (isByPlayer && sessionStarted) {
         //checking message for keyword
         latestPlayerMessage = tempBubble;
-        load_txtChatSession(progressionInt);
+        load_txtChatSession(progressionInt, false);
     }
     set_scrollBar();
 }
@@ -125,34 +126,36 @@ const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function load_txtChatSession(sessionInt) {
+function load_txtChatSession(sessionInt, isBranch) {
     var txtFile = new XMLHttpRequest();
     txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
     txtFile.onreadystatechange = function () {
         if (txtFile.readyState === 4 && txtFile.status == 200) {
-            parse_chatSession(txtFile.responseText, sessionInt);
+            parse_chatSession(txtFile.responseText, isBranch);
             firstMessage = false;
         }
     }
     txtFile.send(null);
 
-    if (sessionInt == 2 && progressionInt == 2)
-        load_txtChatSession(sessionInt + 1);
+    if (sessionInt == 2 && progressionInt == 2) {
+        load_txtChatSession(++sessionInt, true);
+    }
 
-    //if all messages are written
-    if (progressionInt == 5)
+    //if all the messages are written
+    if (progressionInt == 4)
         sessionOver = true;
 }
 
-function parse_chatSession(txtContent, currentSession) {
+function parse_chatSession(txtContent, isBranch) {
     var keywords = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[0].split(", ");
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords)) {
         send_npcMessages(npcMessages, 1);
-        progressionInt = currentSession + 1;
+        progressionInt++;
     }
-    else if (!firstMessage && currentSession != 2)
+    else if (!isBranch)
         delete_playerMessage(latestPlayerMessage);
+
 }
 
 function check_keyword(message, keywords) {
@@ -163,6 +166,7 @@ function check_keyword(message, keywords) {
 }
 
 function delete_playerMessage(elementBubble) {
+    if (!firstMessage) {
         elementBubble.style.transitionDuration = String(deleteTransitionTime) + "s";
         elementBubble.style.transitionDelay = "1s";
         elementBubble.style.backgroundColor = "red";
@@ -172,6 +176,7 @@ function delete_playerMessage(elementBubble) {
                 elementBubble.remove();
             })
         })
+    }
 }
 
 function load_txtHistory() {
