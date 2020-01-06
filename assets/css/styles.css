@@ -1,3 +1,8 @@
+html {
+    height: 100%;
+    overflow: auto;
+}
+
 body {
     background-color: rgb(106, 144, 131);
 }
@@ -50,7 +55,6 @@ body {
     top: 0;
     height: 62vh;
     overflow-y: scroll;
-    overflow-x: hidden;
 }
 
 .messageBubble {
@@ -68,10 +72,12 @@ body {
     background-color: lightblue;
     text-align: center;
     float: left;
-    margin-left: 43%;
-    width: 14%;
+    margin-left: 38%;
+    width: 24%;
     height: 20px;
     border-radius: 5px;
+    margin-top: 1.5vh;
+    margin-bottom: 1vh;
 }
 
 .profileStatus {

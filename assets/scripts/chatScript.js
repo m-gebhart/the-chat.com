@@ -14,12 +14,19 @@ window.onload = function start() {
     chatBody = document.getElementById("chatBody");
     statusLine = document.getElementById("profileStatus");
     load_txtHistory();
-    chatBody.scrollTo({ top: "100vh" });
+    set_scrollBar()
+}
+
+function set_scrollBar() {
+    sleep(100).then(() => {
+        chatBody.lastChild.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'start' });
+    })
 }
 
 function onEnter_sendMessage(event) {
     if (event.keyCode == 13)
         send_playerMessage();
+    set_scrollBar();
 }
 
 function send_playerMessage() {
@@ -129,15 +136,19 @@ function load_txtHistory() {
 }
 
 function parse_chatHistory(txtContent) {
-    //chatBody.innerHTML = txtContent;
     var allMessages = txtContent.split(">>");
     for (var message = 1; message <= allMessages.length - 1; message++) {
         if (allMessages[message].includes("["))
-            create_timeStamp(allMessages[message].substring(2, allMessages[message].length - 3));
+            create_timeStamp(get_passedDate(parseInt(allMessages[message][3])));
         else if (allMessages[message].includes("> "))
             create_bubble(allMessages[message].substring(2, allMessages[message].length - 1), true);
         else
             create_bubble(allMessages[message].substring(0, allMessages[message].length - 1), false);
-
     }
+}
+
+function get_passedDate(passedDaysInt) {
+    var date = new Date();
+    date.setDate(date.getDate() - passedDaysInt)
+    return String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
 }
