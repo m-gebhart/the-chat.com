@@ -1,10 +1,10 @@
 var chatBody;
 var statusLine;
 var inputText;
-var onlineAfter = 5;
+var onlineAfter = 3.5;
 var tempInput = '';
 var latestPlayerMessage;
-var messageTime = 1;
+var messageTime = 1.5;
 var deleteTransitionTime = 2;
 var tempWidth = 0;
 var pxWidthPerLetter = 10;
@@ -28,6 +28,7 @@ window.onload = function start() {
     sleep(1000).then(() => {
         set_scrollBar()
         sessionStarted = true;
+        firstMessage = true;
     })
 }
 
@@ -47,24 +48,28 @@ function send_playerMessage() {
         tempInput = String(inputText.value);
         inputText.value = '';
         if (firstMessage)
-            create_timeStamp("today");
-        firstMessage = false;
+            create_timeStamp("Today");
         create_bubble(tempInput, true);
     }
 }
 
 function send_npcMessages(messageArray, messageInt) {
-    statusLine.innerHTML = "<i>Writing...</i>";
-    if (messageInt < messageArray.length) {
-        sleep((messageArray[messageInt].length) * 50).then(() => {
-            create_bubble(messageArray[messageInt], false);
-            send_npcMessages(messageArray, ++messageInt);
-        })
-    }
-    else {
-        statusLine.innerHTML = "Online";
-        sessionProgression++;
-    }
+    sleep(messageTime * 1000).then(() => {
+        statusLine.innerHTML = "<i>Writing...</i>";
+        if (messageInt < messageArray.length) {
+            sleep((messageArray[messageInt].length) * 70).then(() => {
+                create_bubble(messageArray[messageInt], false);
+                send_npcMessages(messageArray, ++messageInt);
+            })
+        }
+        else {
+            statusLine.innerHTML = "Online";
+            sessionProgression++;
+            sleep(onlineAfter * 1000).then(() => {
+                statusLine.innerHTML = "";
+            })
+        }
+    })
 }
 
 function create_timeStamp(timeStr) {
@@ -78,7 +83,7 @@ function create_bubble(textStr, isByPlayer) {
     set_direction(tempBubble, isByPlayer);
     chatBody.appendChild(tempBubble);
     if (isByPlayer && sessionStarted) {
-        //checking for keyword
+        //checking message for keyword
         latestPlayerMessage = tempBubble;
         load_txtChatSession(sessionProgression);
     }
@@ -123,9 +128,9 @@ const sleep = (ms) => {
 }
 
 function load_txtChatSession(sessionInt) {
+    //for-loop for possible branching of skippable section 2
     var sessionNr = 1;
-    if (sessionInt == 2)
-        sessionNr = 2;
+    if (sessionInt == 2) sessionNr = 2;
     for (var session = 0; session < sessionNr; session++) {
         var txtFile = new XMLHttpRequest();
         txtFile.open("GET", "assets/txt/session_" + String(sessionInt + session) + ".txt", true);
@@ -136,6 +141,10 @@ function load_txtChatSession(sessionInt) {
         }
         txtFile.send(null);
     }
+
+    //if npc wrote all the messages
+    if (sessionInt == 5)
+        sessionOver = true;
 }
 
 function parse_chatSession(txtContent) {
@@ -143,13 +152,15 @@ function parse_chatSession(txtContent) {
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords))
         send_npcMessages(npcMessages, 1);
-    else
+    else if (!firstMessage) 
         delete_playerMessage(latestPlayerMessage);
+    firstMessage = false;
+
 }
 
 function check_keyword(message, keywords) {
     for (var element = 0; element < keywords.length; element++)
-        if (message.includes(String(keywords[element])))
+        if (message.toLowerCase().includes(String(keywords[element])))
             return true;
     return false;
 }
