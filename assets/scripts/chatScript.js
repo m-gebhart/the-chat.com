@@ -44,7 +44,7 @@ function onEnter_sendMessage(event) {
 }
 
 function send_playerMessage() {
-    if (statusLine.innerHTML != "<i>Writing...</i>" && !sessionOver && inputText.value != '') {
+    if (statusLine.innerHTML != "<i>Writing...</i>" && !sessionOver && !check_spacesOnly(inputText.value)) {
         tempInput = String(inputText.value);
         inputText.value = '';
         if (firstMessage)
@@ -144,7 +144,7 @@ function check_branchingSession(startSessionInt) {
     stopBranch = false;
     var tempProgressionInt = startSessionInt;
     load_txtChatSession(tempProgressionInt, stopBranch);
-    sleep(500).then(() => {
+    sleep(1000).then(() => {
         load_txtChatSession(tempProgressionInt + 1, !stopBranch);
     })
 }
@@ -178,6 +178,13 @@ function check_keyword(message, keywords) {
         if (message.toLowerCase().includes(keywords[element]))
             return true;
     return false;
+}
+
+function check_spacesOnly(message) {
+    for (var element = 0; element < message.length(); element++)
+        if (message[element] != " ")
+            return false;
+    return true;
 }
 
 function delete_playerMessage(elementBubble) {
