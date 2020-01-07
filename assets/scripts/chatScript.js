@@ -44,7 +44,7 @@ function onEnter_sendMessage(event) {
 }
 
 function send_playerMessage() {
-    if (statusLine.innerHTML != "<i>Writing...</i>" && !sessionOver && !check_spacesOnly(inputText.value)) {
+    if (statusLine.innerHTML != "<i>Writing...</i>" && !sessionOver) {
         tempInput = String(inputText.value);
         inputText.value = '';
         if (firstMessage)
