@@ -16,7 +16,11 @@ var firstMessage = true;
 var sessionStarted = false;
 var sessionOver = false;
 var progressionInt = 1;
+var maxSessionsInt = 4;
 var stopBranch = false;
+var isWriting = false;
+var cooldown = false;
+var cooldownTime = 1;
 
 window.onload = function start() {
     chatBody = document.getElementById("chatBody");
@@ -44,7 +48,8 @@ function onEnter_sendMessage(event) {
 }
 
 function send_playerMessage() {
-    if (statusLine.innerHTML != "<i>Writing...</i>" && !sessionOver) {
+    if (!isWriting && !sessionOver && !cooldown) {
+        start_cooldown();
         tempInput = String(inputText.value);
         inputText.value = '';
         if (firstMessage)
@@ -52,26 +57,31 @@ function send_playerMessage() {
         create_bubble(tempInput, true);
     }
 }
+function start_cooldown() {
+    cooldown = true;
+    sleep(cooldownTime * 1000).then(() => {
+        cooldown = false;
+    })
+}
 
 function send_npcMessages(messageArray, messageInt) {
-    sleep(messageTime * 1000).then(() => {
-        statusLine.innerHTML = "Online";
         sleep(messageTime * 500).then(() => {
             statusLine.innerHTML = "<i>Writing...</i>";
             if (messageInt < messageArray.length) {
                 sleep((messageArray[messageInt].length) * 1).then(() => {
                     create_bubble(messageArray[messageInt], false);
+                    //recursive function
                     send_npcMessages(messageArray, ++messageInt);
                 })
             }
             else {
+                isWriting = false;
                 statusLine.innerHTML = "Online";
                 sleep(onlineAfter * 1000).then(() => {
                     statusLine.innerHTML = "";
                 })
             }
         })
-    })
 }
 
 function create_timeStamp(timeStr) {
@@ -134,18 +144,14 @@ function check_progression(progressionInt) {
         check_branchingSession(progressionInt)
     else
         load_txtChatSession(progressionInt, !firstMessage);
-
-    //if all the messages are written
-    if (progressionInt == 4)
-        sessionOver = true;
 }
 
 function check_branchingSession(startSessionInt) {
     stopBranch = false;
     var tempProgressionInt = startSessionInt;
-    load_txtChatSession(tempProgressionInt, stopBranch);
-    sleep(1000).then(() => {
-        load_txtChatSession(tempProgressionInt + 1, !stopBranch);
+    load_txtChatSession(tempProgressionInt + 1, stopBranch);
+    sleep(2000).then(() => {
+        load_txtChatSession(tempProgressionInt, !stopBranch);
     })
 }
 
@@ -165,12 +171,28 @@ function parse_chatSession(txtContent, sessionInt, deleteEnabled) {
     var keywords = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[0].split(", ");
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords)) {
-        send_npcMessages(npcMessages, 1);
-        progressionInt = sessionInt + 1;
-        stopBranch = true;
+        npcReaction(npcMessages, sessionInt);
     }
     else if (deleteEnabled)
         delete_playerMessage(latestPlayerMessage);
+}
+
+function npcReaction(npcMessages, sessionInt) {
+    sleep(messageTime * 1000).then(() => {
+        isWriting = true;
+        statusLine.innerHTML = "Online";
+        send_npcMessages(npcMessages, 1);
+        increase_progression(sessionInt + 1);
+        progressionInt = sessionInt + 1;
+        stopBranch = true;
+    })
+}
+
+function increase_progression(addingInt) {
+    progressionInt += addingInt;
+    //if all the messages are written
+    if (progressionInt == maxSessionsInt)
+        sessionOver = true;
 }
 
 function check_keyword(message, keywords) {
