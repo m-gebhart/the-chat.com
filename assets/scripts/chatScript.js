@@ -191,7 +191,7 @@ function npcReaction(npcMessages, sessionInt) {
 function increase_progression(addingInt) {
     progressionInt += addingInt;
     //if all the messages are written
-    if (progressionInt == maxSessionsInt)
+    if (progressionInt == maxSessionsInt + 1)
         sessionOver = true;
 }
 
