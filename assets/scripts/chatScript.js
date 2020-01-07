@@ -54,20 +54,23 @@ function send_playerMessage() {
 }
 
 function send_npcMessages(messageArray, messageInt) {
-    sleep(messageTime * 10).then(() => {
-        statusLine.innerHTML = "<i>Writing...</i>";
-        if (messageInt < messageArray.length) {
-            sleep((messageArray[messageInt].length) * 1).then(() => {
-                create_bubble(messageArray[messageInt], false);
-                send_npcMessages(messageArray, ++messageInt);
-            })
-        }
-        else {
-            statusLine.innerHTML = "Online";
-            sleep(onlineAfter * 1000).then(() => {
-                statusLine.innerHTML = "";
-            })
-        }
+    sleep(messageTime * 1000).then(() => {
+        statusLine.innerHTML = "Online";
+        sleep(messageTime * 500).then(() => {
+            statusLine.innerHTML = "<i>Writing...</i>";
+            if (messageInt < messageArray.length) {
+                sleep((messageArray[messageInt].length) * 1).then(() => {
+                    create_bubble(messageArray[messageInt], false);
+                    send_npcMessages(messageArray, ++messageInt);
+                })
+            }
+            else {
+                statusLine.innerHTML = "Online";
+                sleep(onlineAfter * 1000).then(() => {
+                    statusLine.innerHTML = "";
+                })
+            }
+        })
     })
 }
 
@@ -141,7 +144,7 @@ function check_branchingSession(startSessionInt) {
     stopBranch = false;
     var tempProgressionInt = startSessionInt;
     load_txtChatSession(tempProgressionInt, stopBranch);
-    sleep(deleteTransitionTime * 1000).then(() => {
+    sleep(500).then(() => {
         load_txtChatSession(tempProgressionInt + 1, !stopBranch);
     })
 }
