@@ -13,10 +13,10 @@ var pxHeightPerLine = 25;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
-var branching = false;
 var sessionStarted = false;
 var sessionOver = false;
 var progressionInt = 1;
+var stopBranch = false;
 
 window.onload = function start() {
     chatBody = document.getElementById("chatBody");
@@ -84,7 +84,7 @@ function create_bubble(textStr, isByPlayer) {
     if (isByPlayer && sessionStarted) {
         //checking message for keyword
         latestPlayerMessage = tempBubble;
-        load_txtChatSession(progressionInt, false);
+        check_progression(progressionInt);
     }
     set_scrollBar();
 }
@@ -126,36 +126,48 @@ const sleep = (ms) => {
     return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function load_txtChatSession(sessionInt, isBranch) {
-    var txtFile = new XMLHttpRequest();
-    txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
-    txtFile.onreadystatechange = function () {
-        if (txtFile.readyState === 4 && txtFile.status == 200) {
-            parse_chatSession(txtFile.responseText, isBranch);
-            firstMessage = false;
-        }
-    }
-    txtFile.send(null);
-
-    if (sessionInt == 2 && progressionInt == 2) {
-        load_txtChatSession(++sessionInt, true);
-    }
+function check_progression(progressionInt) {
+    if (progressionInt == 2)
+        check_branchingSession(progressionInt)
+    else
+        load_txtChatSession(progressionInt, !firstMessage);
 
     //if all the messages are written
     if (progressionInt == 4)
         sessionOver = true;
 }
 
-function parse_chatSession(txtContent, isBranch) {
+function check_branchingSession(startSessionInt) {
+    stopBranch = false;
+    var tempProgressionInt = startSessionInt;
+    load_txtChatSession(tempProgressionInt, stopBranch);
+    sleep(deleteTransitionTime * 1000).then(() => {
+        load_txtChatSession(tempProgressionInt + 1, !stopBranch);
+    })
+}
+
+function load_txtChatSession(sessionInt, deleteEnabled) {
+    var txtFile = new XMLHttpRequest();
+    txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
+    txtFile.onreadystatechange = function () {
+        if (txtFile.readyState === 4 && txtFile.status == 200) {
+            parse_chatSession(txtFile.responseText, sessionInt, deleteEnabled);
+            firstMessage = false;
+        }
+    }
+    txtFile.send(null);
+}
+
+function parse_chatSession(txtContent, sessionInt, deleteEnabled) {
     var keywords = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[0].split(", ");
     var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords)) {
         send_npcMessages(npcMessages, 1);
-        progressionInt++;
+        progressionInt = sessionInt + 1;
+        stopBranch = true;
     }
-    else if (!isBranch)
+    else if (deleteEnabled)
         delete_playerMessage(latestPlayerMessage);
-
 }
 
 function check_keyword(message, keywords) {
@@ -166,17 +178,15 @@ function check_keyword(message, keywords) {
 }
 
 function delete_playerMessage(elementBubble) {
-    if (!firstMessage) {
-        elementBubble.style.transitionDuration = String(deleteTransitionTime) + "s";
-        elementBubble.style.transitionDelay = "1s";
-        elementBubble.style.backgroundColor = "red";
-        sleep(deleteTransitionTime * 1000).then(() => {
-            elementBubble.style.opacity = 0;
-            sleep(deleteTransitionTime * 1500).then(() => {
-                elementBubble.remove();
-            })
+    elementBubble.style.transitionDuration = String(deleteTransitionTime) + "s";
+    elementBubble.style.transitionDelay = "1s";
+    elementBubble.style.backgroundColor = "red";
+    sleep(deleteTransitionTime * 1000).then(() => {
+        elementBubble.style.opacity = 0;
+        sleep(deleteTransitionTime * 1500).then(() => {
+            elementBubble.remove();
         })
-    }
+    })
 }
 
 function load_txtHistory() {
