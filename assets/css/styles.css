@@ -5,12 +5,14 @@ html {
 
 body {
     background-color: rgb(106, 144, 131);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .chatWindow {
     position: relative;
     display: block;
-    background-color: rgb(221, 212, 207);
+    background: rgba(221, 212, 207, 0.95) url("/assets/images/background.png") no-repeat left bottom+5vh;
+    background-size: 50%;
     color: black;
     width: calc(100vw - 20%);
     height: 80vh;
