@@ -30,15 +30,20 @@ window.onload = function start() {
         statusLine.innerHTML = "Online";
     })
     load_txtHistory();
-    sleep(1000).then(() => {
+    sleep(800).then(() => {
         set_scrollBar()
         sessionStarted = true;
     })
 }
 
 function set_scrollBar() {
+    var scrollBehavior;
+    if (sessionStarted)
+        scrollBehavior = 'smooth';
+    else
+        scrollBehavior = 'auto';
     sleep(10).then(() => {
-        chatBody.lastChild.scrollIntoView({ behavior: 'smooth', inline: 'nearest', block: 'start' });
+        chatBody.lastChild.scrollIntoView({ behavior: scrollBehavior, inline: 'nearest', block: 'start' });
     })
 }
 
@@ -65,10 +70,10 @@ function start_cooldown() {
 }
 
 function send_npcMessages(messageArray, messageInt) {
-        sleep(messageTime * 500).then(() => {
+    sleep(((messageTime - Math.random()) + (messageTime + Math.random())) * 500).then(() => {
             statusLine.innerHTML = "<i>Writing...</i>";
             if (messageInt < messageArray.length) {
-                sleep((messageArray[messageInt].length) * 1).then(() => {
+                sleep((messageArray[messageInt].length) * 10).then(() => {
                     create_bubble(messageArray[messageInt], false);
                     //recursive function
                     send_npcMessages(messageArray, ++messageInt);
@@ -168,8 +173,8 @@ function load_txtChatSession(sessionInt, deleteEnabled) {
 }
 
 function parse_chatSession(txtContent, sessionInt, deleteEnabled) {
-    var keywords = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[0].split(", ");
-    var npcMessages = txtContent.split(">> KEYWORDS: [[")[1].split("]]")[1].split(">> ");
+    var keywords = txtContent.split("KEYWORDS: [[")[1].split("]]")[0].split(", ");
+    var npcMessages = txtContent.split("KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords)) {
         npcReaction(npcMessages, sessionInt);
     }
