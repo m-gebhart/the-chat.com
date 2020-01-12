@@ -57,11 +57,14 @@ function send_playerMessage() {
         start_cooldown();
         tempInput = String(inputText.value);
         inputText.value = '';
-        if (firstMessage)
+        if (firstMessage) {
             create_timeStamp("Today");
+            firstMessage = false;
+        }
         create_bubble(tempInput, true);
     }
 }
+
 function start_cooldown() {
     cooldown = true;
     sleep(cooldownTime * 1000).then(() => {
@@ -73,7 +76,7 @@ function send_npcMessages(messageArray, messageInt) {
     sleep(((messageTime - Math.random()) + (messageTime + Math.random())) * 500).then(() => {
             statusLine.innerHTML = "<i>Writing...</i>";
             if (messageInt < messageArray.length) {
-                sleep((messageArray[messageInt].length) * 10).then(() => {
+                sleep((messageArray[messageInt].length) * 20).then(() => {
                     create_bubble(messageArray[messageInt], false);
                     //recursive function
                     send_npcMessages(messageArray, ++messageInt);
@@ -148,7 +151,7 @@ function check_progression(progressionInt) {
     if (progressionInt == 2)
         check_branchingSession(progressionInt)
     else
-        load_txtChatSession(progressionInt, !firstMessage);
+        load_txtChatSession(progressionInt);
 }
 
 function check_branchingSession(startSessionInt) {
@@ -160,25 +163,24 @@ function check_branchingSession(startSessionInt) {
     })
 }
 
-function load_txtChatSession(sessionInt, deleteEnabled) {
+function load_txtChatSession(sessionInt) {
     var txtFile = new XMLHttpRequest();
     txtFile.open("GET", "assets/txt/session_" + String(sessionInt) + ".txt", true);
     txtFile.onreadystatechange = function () {
         if (txtFile.readyState === 4 && txtFile.status == 200) {
-            parse_chatSession(txtFile.responseText, sessionInt, deleteEnabled);
-            firstMessage = false;
+            parse_chatSession(txtFile.responseText, sessionInt);
         }
     }
     txtFile.send(null);
 }
 
-function parse_chatSession(txtContent, sessionInt, deleteEnabled) {
+function parse_chatSession(txtContent, sessionInt) {
     var keywords = txtContent.split("KEYWORDS: [[")[1].split("]]")[0].split(", ");
     var npcMessages = txtContent.split("KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords)) {
         npcReaction(npcMessages, sessionInt);
     }
-    else if (deleteEnabled)
+    else
         delete_playerMessage(latestPlayerMessage);
 }
 
