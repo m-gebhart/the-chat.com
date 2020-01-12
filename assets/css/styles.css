@@ -11,7 +11,7 @@ body {
 .chatWindow {
     position: relative;
     display: block;
-    background: rgba(221, 212, 207, 0.95) url("assets/images/background.png") no-repeat left bottom+5vh;
+    background: rgba(221, 212, 207, 0.95) url("background.png") no-repeat left bottom+5vh;
     background-size: 50%;
     color: black;
     width: calc(100vw - 20%);
