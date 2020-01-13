@@ -176,7 +176,7 @@ function send_npcMessages(messageArray, messageInt) {
     sleep(((messageTime - Math.random()) + (messageTime + Math.random())) * 500).then(() => {
         statusLine.innerHTML = "<i>Writing...</i>";
         if (messageInt < messageArray.length) {
-            sleep((messageArray[messageInt].length) * 1).then(() => {
+            sleep((messageArray[messageInt].length) * 23).then(() => {
                 create_bubble(messageArray[messageInt], false);
                 send_npcMessages(messageArray, ++messageInt);
             });
