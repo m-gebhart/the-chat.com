@@ -61,27 +61,27 @@ body {
 
 .messageBubble {
     background-color: white;
-    border-radius: 4px;
-    padding-top: 2px;
+    border-radius: 9px;
+    padding: 3px 6px;
     word-wrap: break-word;
     margin-top: 0.5vh;
     margin-bottom: 1.5vh;
     font-size: large;
     max-width: 40%;
+    height: auto;
+    text-align: justify;
 }
 
 .npcBubble {
     float: left;
     margin-right: 100%;
     background-color: white;
-    text-align: left;
 }
 
 .playerBubble {
     float: right;
     margin-left: 100%;
     background-color: rgb(140, 251, 162);
-    text-align: right;
 }
 
 .timeBubble {
@@ -92,7 +92,7 @@ body {
     min-width: 100px;
     width: 24%;
     height: 20px;
-    border-radius: 5px;
+    border-radius: 7px;
     margin-top: 1.5vh;
     margin-bottom: 1vh;
 }
@@ -123,13 +123,13 @@ body {
     width: 97%;
 }
 
-.inputFieldContainer input[type=textField] {
-    border-radius: 8px;
-    border: none;
-    width: 100%;
-    padding-left: 8px;
-    font-size: large;
-}
+    .inputFieldContainer input[type=textField] {
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        padding-left: 8px;
+        font-size: large;
+    }
 
 .sendButtonContainer {
     grid-area: sendButton;
