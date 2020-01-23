@@ -62,7 +62,7 @@ function onEnter_sendMessage(event) {
 
 //print message typed by player
 function send_playerMessage() {
-    if (!isWriting && progressionInt < maxSessionsInt + 1 && inputText.value != "") {
+    if (!isWriting && progressionInt < maxSessionsInt + 1 && !spaces_only(inputText.value)) {
         tempInput = String(inputText.value);
         inputText.value = '';
         if (firstMessage) {
@@ -71,6 +71,16 @@ function send_playerMessage() {
         }
         create_bubble(tempInput, true);
     }
+}
+
+//checking, whether message has only spaces
+function spaces_only(inputMessage) {
+    var onlySpaces = true;
+    for (var i = 0; i < inputMessage.length; i++) {
+        if (inputMessage[i] != " ")
+            onlySpaces = false;
+    }
+    return onlySpaces;
 }
 
 function create_timeStamp(timeStr) {
