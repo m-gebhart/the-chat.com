@@ -1,10 +1,7 @@
 KEYWORDS: [[4, four, IV, vier]]
 >> Yeah it seems like someone was really angry with him
->> I tried to put the pieces together but this guy who works at the kiosk asked to see it
->> he gave me some coffee for the pieces
->> it was cold last night, so the hot coffee was really delicious!
->> But I can’t rely on handouts each day
->> if I want to become a famous musician, I need to get better!
->> and with all this practice, it feels like I’m getting better but there were even less people today
+>> I tried to put the pieces together but this guy who works at the kiosk asked to see it and he gave me some coffee for the pieces
+>> it was cold last night, so the hot coffee was really delicious! but I can’t rely on handouts each day
+>> if I want to become a famous musician, I need to get better! and with all this practice, it feels like I’m getting better but there were even less people today
 >> I don’t understand, is something wrong with my song?
->> Here check it out (<a href="assets/sounds/forlornhope.mp3">forlornhope.mp3</a>) 
+>> Here check it out (<a target="_blank" href="assets/sounds/forlornhope.mp3">forlornhope.mp3</a>) 

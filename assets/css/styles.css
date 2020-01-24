@@ -11,7 +11,7 @@ body {
 .chatWindow {
     position: relative;
     display: block;
-    background: rgba(221, 212, 207, 0.95) url("background.png") no-repeat left bottom+5vh;
+    background: rgba(221, 212, 207, 0.95) url("background.png") no-repeat left bottom -7.5vh;
     background-size: 50%;
     color: black;
     width: calc(100vw - 20%);
@@ -123,13 +123,13 @@ body {
     width: 97%;
 }
 
-    .inputFieldContainer input[type=textField] {
-        border-radius: 8px;
-        border: none;
-        width: 100%;
-        padding-left: 8px;
-        font-size: large;
-    }
+.inputFieldContainer input[type=textField] {
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    padding-left: 8px;
+    font-size: large;
+}
 
 .sendButtonContainer {
     grid-area: sendButton;

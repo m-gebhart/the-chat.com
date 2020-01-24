@@ -17,6 +17,7 @@ var isWriting = false;
 var cooldown = false;
 var cooldownTime = 1;
 var inSession = false;
+var solvedText = "Good work! You found it.";
 
 //Start()-function, loading past messages (chatHistory.txt) and init session
 window.onload = function start() {
@@ -181,6 +182,11 @@ function npcReaction(npcMessages, sessionInt) {
     });
 }
 
+function increase_progression(sessionInt) {
+        
+}
+
+
 //recursive function: printing the npc's messages one after one
 function send_npcMessages(messageArray, messageInt) {
     sleep(((messageTime - Math.random()) + (messageTime + Math.random())) * 500).then(() => {
@@ -193,6 +199,8 @@ function send_npcMessages(messageArray, messageInt) {
         }
         else {
             isWriting = false;
+            if (progressionInt == 5)
+                document.getElementById("inputField").placeholder = solvedText;
             statusLine.innerHTML = "Online";
             sleep(onlineAfter * 1000).then(() => {
                 statusLine.innerHTML = "";
