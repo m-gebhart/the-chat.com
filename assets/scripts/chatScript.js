@@ -18,6 +18,7 @@ var cooldown = false;
 var cooldownTime = 1;
 var inSession = false;
 var solvedText = "Good work! You found it.";
+var lastMessage = "Here check it out (<a target='_blank' href='assets/sounds/forlornhope.mp3'>forlornhope.mp3</a>)";
 
 //Start()-function, loading past messages (chatHistory.txt) and init session
 window.onload = function start() {
@@ -182,11 +183,6 @@ function npcReaction(npcMessages, sessionInt) {
     });
 }
 
-function increase_progression(sessionInt) {
-        
-}
-
-
 //recursive function: printing the npc's messages one after one
 function send_npcMessages(messageArray, messageInt) {
     sleep(((messageTime - Math.random()) + (messageTime + Math.random())) * 500).then(() => {
@@ -199,13 +195,30 @@ function send_npcMessages(messageArray, messageInt) {
         }
         else {
             isWriting = false;
-            if (progressionInt == 5)
-                document.getElementById("inputField").placeholder = solvedText;
-            statusLine.innerHTML = "Online";
-            sleep(onlineAfter * 1000).then(() => {
-                statusLine.innerHTML = "";
-            });
+            if (progressionInt == 5 && inSession)
+                send_song();
+            else {
+                npc_offline();
+            }
         }
+    });
+}
+
+function send_song() {
+    inSession = false;
+    statusLine.innerHTML = "<i>Recording...<i>";
+    document.getElementById("inputField").maxLength = "0";
+    sleep(1000 * 109).then(() => {
+        create_bubble(lastMessage, false);
+        document.getElementById("inputField").placeholder = solvedText;
+        npc_offline();
+    });
+}
+
+function npc_offline() {
+    statusLine.innerHTML = "Online";
+    sleep(onlineAfter * 1000).then(() => {
+        statusLine.innerHTML = "";
     });
 }
 

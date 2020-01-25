@@ -4,4 +4,4 @@ KEYWORDS: [[4, four, IV, vier]]
 >> it was cold last night, so the hot coffee was really delicious! but I can’t rely on handouts each day
 >> if I want to become a famous musician, I need to get better! and with all this practice, it feels like I’m getting better but there were even less people today
 >> I don’t understand, is something wrong with my song?
->> Here check it out (<a target="_blank" href="assets/sounds/forlornhope.mp3">forlornhope.mp3</a>) 
+>> let me record it
