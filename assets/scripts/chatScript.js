@@ -208,7 +208,7 @@ function send_song() {
     inSession = false;
     statusLine.innerHTML = "<i>Recording...<i>";
     document.getElementById("inputField").maxLength = "0";
-    sleep(1000 * 109).then(() => {
+    sleep(1000 * 15).then(() => {
         create_bubble(lastMessage, false);
         document.getElementById("inputField").placeholder = solvedText;
         npc_offline();
