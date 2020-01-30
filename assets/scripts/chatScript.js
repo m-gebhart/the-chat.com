@@ -19,6 +19,10 @@ var cooldownTime = 1;
 var inSession = false;
 var solvedText = "Good work! You found it.";
 var lastMessage = "Here check it out (<a target='_blank' href='assets/sounds/forlornhope.mp3'>forlornhope.mp3</a>)";
+var failedAttempts = 0;
+var warningInt = 0;
+var warningTier = 3;
+var messageAnimationTime = 0.05;
 
 //Start()-function, loading past messages (chatHistory.txt) and init session
 window.onload = function start() {
@@ -162,8 +166,10 @@ function parse_chatSession(txtContent, sessionInt) {
     var npcMessages = txtContent.split("KEYWORDS: [[")[1].split("]]")[1].split(">> ");
     if (check_keyword(tempInput, keywords))
         npcReaction(npcMessages, sessionInt);
-    else
+    else {
+        warningMessage();
         delete_playerMessage(latestPlayerMessage);
+    }
 }
 
 function check_keyword(message, keywords) {
@@ -264,4 +270,50 @@ function get_passedDate(passedDaysInt) {
     var date = new Date();
     date.setDate(date.getDate() - passedDaysInt);
     return String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
+}
+
+function load_txtWarning(tierNr) {
+    var txtFile = new XMLHttpRequest();
+    txtFile.open("GET", "assets/txt/warning_" + tierNr + ".txt", true);
+    txtFile.onreadystatechange = function () {
+        if (txtFile.readyState === 4 && txtFile.status == 200)
+            send_warningMessage(txtFile.responseText);
+    };
+    txtFile.send(null);
+}
+
+function warningMessage() {
+    failedAttempts++;
+    if (failedAttempts == 3)
+        load_txtWarning(3);
+    else if (failedAttempts == 5)
+        load_txtWarning(2);
+    else if (failedAttempts == 19)
+        load_txtWarning(0);
+    else if (failedAttempts == 20)
+        window.close();
+    else if (failedAttempts > 5)
+        load_txtWarning(1);
+}
+
+function send_warningMessage(txtMessageFile) {
+    var warning = txtMessageFile.split("> ")[Math.floor(Math.random() * txtMessageFile.split("> ").length-1) +1];
+    inputText.placeholder = "";
+    isWriting = true;
+    inputText.maxLength = 0;
+    messageAnimation(warning, 0);
+}
+
+function messageAnimation(message, position) {
+    if (position < message.length)
+        sleep(messageAnimationTime * 1000).then(() => {
+            inputText.placeholder += message[position];
+            messageAnimation(message, position + 1);
+        })
+    else
+        sleep(2000).then(() => {
+            inputText.placeholder = "Write a message";
+            isWriting = false;
+            inputText.maxLength = 1000;
+        })
 }
