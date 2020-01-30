@@ -7,7 +7,7 @@ var latestPlayerMessage;
 var messageTime = 1.5;
 var deleteTransitionTime = 2;
 var pxWidthPerLetter = 11;
-var pxOffsetWidth = 6;
+var pxOffsetWidth = 7;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
@@ -52,10 +52,9 @@ function set_scrollBar() {
     else
         scrollBehavior = 'auto';
 
-    sleep(10).then(() => {
+    sleep(100).then(() => {
         chatBody.lastChild.scrollIntoView({
             behavior: scrollBehavior,
-            inline: 'nearest',
             block: 'start'
         });
     });

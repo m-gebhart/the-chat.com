@@ -8,6 +8,11 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
+img {
+    width: 96%;
+    padding: 2%;
+}
+
 .chatWindow {
     position: relative;
     display: block;
