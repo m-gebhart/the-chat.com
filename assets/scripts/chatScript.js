@@ -7,7 +7,7 @@ var latestPlayerMessage;
 var messageTime = 1.5;
 var deleteTransitionTime = 2;
 var pxWidthPerLetter = 11;
-var pxOffsetWidth = 7;
+var pxOffsetWidth = 6;
 var textPadding = "5px";
 var bubbleSideMargin = "1.5vw";
 var firstMessage = true;
@@ -115,7 +115,14 @@ function create_divElement(textStr, cssClass) {
 }
 
 function set_size(bubbleElement, text) {
-    bubbleElement.style.width = String(pxWidthPerLetter * text.length + pxOffsetWidth + "px");
+    var widthInt = pxOffsetWidth;
+    for (var i = 0; i < text.length; i++) {
+        if (text[i] == "m" || text[i] == "w")
+            widthInt += pxWidthPerLetter + 4;
+        else
+            widthInt += pxWidthPerLetter;
+    }
+    bubbleElement.style.width = String(widthInt + "px");
 }
 
 //determining whether lates message should set to the left (as npc's message) or to the right (as player's message)
